@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>svgp_top · Block diagram</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-paper:   #2d3142;
+      --color-ink:     #f5f5f5;
+      --color-muted:   #bfc0c0;
+      --color-accent:  #f08a59;
+      --font-sans:     'Geist', system-ui, sans-serif;
+      --font-serif:    'Instrument Serif', serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--color-paper);
+      color: var(--color-ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+    }
+    .frame { max-width: 1320px; width: 100%; min-width: 0; }
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--color-muted);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 2.4vw + 0.75rem, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--color-ink);
+      margin-bottom: 1.5rem;
+    }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    svg { width: 100%; min-width: 1280px; display: block; }
+    @media print {
+      .diagram-container { overflow-x: visible; }
+      svg { min-width: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · Spartan-3E · VHDL</p>
+    <h1>svgp_top: VGA game on one 50 MHz clock</h1>
+
+    <div class="diagram-container">
+    <svg viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="svgp-block-diagram-dark-title svgp-block-diagram-dark-desc">
+      <title id="svgp-block-diagram-dark-title">svgp_top: VGA game on one 50 MHz clock</title>
+      <desc id="svgp-block-diagram-dark-desc">Block diagram of the FPGA top level: a 25 MHz clock enable and synchronised reset drive the vga_timing counters, the game_logic state machine and the pixel_gen colour mux, which drives the video DAC and VGA sync pins.</desc>
+      <defs>
+        <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.9" fill="rgba(245,245,245,0.10)"/>
+        </pattern>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bfc0c0"/></marker>
+        <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#f08a59"/></marker>
+        <marker id="arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#739fdf"/></marker>
+      </defs>
+
+      <rect width="100%" height="100%" fill="#2d3142"/>
+      <rect width="100%" height="100%" fill="url(#dots)" opacity="0.55"/>
+
+      <!-- Zone: svgp_top (outer) -->
+      <rect x="160" y="72" width="924" height="504" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(245,245,245,0.14)" stroke-width="0.8"/>
+      <rect x="176" y="76" width="176" height="12" rx="2" fill="#2d3142"/>
+      <text x="264" y="85" fill="#949eb2" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">SVGP_TOP · FPGA</text>
+
+      <!-- Zone: clock-enabled datapath (inner) -->
+      <rect x="184" y="272" width="816" height="284" rx="8" fill="rgba(245,245,245,0.02)" stroke="rgba(245,245,245,0.10)" stroke-width="0.8" stroke-dasharray="5,4"/>
+      <rect x="200" y="276" width="220" height="12" rx="2" fill="#2d3142"/>
+      <text x="310" y="285" fill="#949eb2" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.14em">EVERY REG HERE: CE + RST</text>
+
+      <!-- ===== Arrows (drawn before nodes) ===== -->
+
+      <!-- Pin inputs -->
+      <line x1="112" y1="136" x2="200" y2="136" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="112" y1="216" x2="200" y2="216" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="112" y1="496" x2="200" y2="496" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- pix_en -> DAC_CLK -->
+      <line x1="376" y1="124" x2="1124" y2="124" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- pix_en -> CE to datapath (control, dashed) -->
+      <path d="M 376,148 H 652 Q 660,148 660,156 V 272" fill="none" stroke="#bfc0c0" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+      <!-- rst_sync -> RST to datapath (control, dashed) -->
+      <path d="M 376,216 H 572 Q 580,216 580,224 V 272" fill="none" stroke="#bfc0c0" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+
+      <!-- sw_sync -> game_logic -->
+      <line x1="376" y1="496" x2="440" y2="496" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- vga_timing -> game_logic (frame_tick) -->
+      <line x1="540" y1="384" x2="540" y2="456" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- vga_timing -> pixel_gen -->
+      <line x1="640" y1="328" x2="760" y2="328" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="640" y1="360" x2="760" y2="360" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- game_logic -> pixel_gen (headline) -->
+      <line x1="640" y1="496" x2="760" y2="496" stroke="#f08a59" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <!-- pixel_gen -> DAC -->
+      <line x1="976" y1="404" x2="1124" y2="404" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="976" y1="452" x2="1124" y2="452" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+      <!-- ===== Arrow labels ===== -->
+      <rect x="868" y="104" width="64" height="12" rx="2" fill="#2d3142"/>
+      <text x="900" y="113" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">DAC_CLK</text>
+
+      <rect x="672" y="200" width="72" height="12" rx="2" fill="#2d3142"/>
+      <text x="708" y="209" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CE 25 MHZ</text>
+
+      <rect x="508" y="240" width="60" height="12" rx="2" fill="#2d3142"/>
+      <text x="538" y="249" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">RST SYNC</text>
+
+      <rect x="380" y="476" width="56" height="12" rx="2" fill="#2d3142"/>
+      <text x="408" y="485" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SW_S</text>
+
+      <rect x="552" y="414" width="76" height="12" rx="2" fill="#2d3142"/>
+      <text x="590" y="423" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">FRAME_TICK</text>
+
+      <rect x="648" y="308" width="104" height="12" rx="2" fill="#2d3142"/>
+      <text x="700" y="317" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">X · Y · ACTIVE</text>
+
+      <rect x="648" y="368" width="104" height="12" rx="2" fill="#2d3142"/>
+      <text x="700" y="377" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">HSYNC · VSYNC</text>
+
+      <rect x="648" y="476" width="104" height="12" rx="2" fill="#2d3142"/>
+      <text x="700" y="485" fill="#f08a59" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">BALL · PADDLES</text>
+
+      <rect x="1004" y="384" width="80" height="12" rx="2" fill="#2d3142"/>
+      <text x="1044" y="393" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">R G B [7:0]</text>
+
+      <rect x="1004" y="432" width="80" height="12" rx="2" fill="#2d3142"/>
+      <text x="1044" y="441" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">H · V (REG)</text>
+
+      <!-- ===== Pin stubs (left) ===== -->
+      <text x="104" y="132" fill="#f5f5f5" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">clk 50 MHz</text>
+      <text x="104" y="148" fill="#949eb2" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">pin C9</text>
+      <text x="104" y="212" fill="#f5f5f5" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">BTN_S</text>
+      <text x="104" y="228" fill="#949eb2" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">pin K17</text>
+      <text x="104" y="492" fill="#f5f5f5" font-size="11" font-weight="600" font-family="'Geist', sans-serif" text-anchor="end">SW0–SW3</text>
+      <text x="104" y="508" fill="#949eb2" font-size="9" font-family="'Geist Mono', monospace" text-anchor="end">slide switches</text>
+
+      <!-- ===== Nodes ===== -->
+
+      <!-- pix_en (clock enable) -->
+      <rect x="200" y="104" width="176" height="64" rx="6" fill="#2d3142"/>
+      <rect x="200" y="104" width="176" height="64" rx="6" fill="rgba(245,245,245,0.05)" stroke="#bfc0c0" stroke-width="1"/>
+      <rect x="208" y="112" width="28" height="12" rx="2" fill="transparent" stroke="rgba(191,192,192,0.50)" stroke-width="0.8"/>
+      <text x="222" y="121" fill="#bfc0c0" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CLK</text>
+      <text x="288" y="140" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">pix_en_r</text>
+      <text x="288" y="156" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">toggle FF · ÷2 enable</text>
+
+      <!-- rst sync -->
+      <rect x="200" y="184" width="176" height="64" rx="6" fill="#2d3142"/>
+      <rect x="200" y="184" width="176" height="64" rx="6" fill="rgba(245,245,245,0.05)" stroke="#bfc0c0" stroke-width="1"/>
+      <rect x="208" y="192" width="28" height="12" rx="2" fill="transparent" stroke="rgba(191,192,192,0.50)" stroke-width="0.8"/>
+      <text x="222" y="201" fill="#bfc0c0" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SYNC</text>
+      <text x="288" y="220" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">sync_2ff → rst</text>
+      <text x="288" y="236" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">synchronous · active-high</text>
+
+      <!-- sw sync -->
+      <rect x="200" y="464" width="176" height="64" rx="6" fill="#2d3142"/>
+      <rect x="200" y="464" width="176" height="64" rx="6" fill="rgba(245,245,245,0.05)" stroke="#bfc0c0" stroke-width="1"/>
+      <rect x="208" y="472" width="28" height="12" rx="2" fill="transparent" stroke="rgba(191,192,192,0.50)" stroke-width="0.8"/>
+      <text x="222" y="481" fill="#bfc0c0" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SYNC</text>
+      <text x="288" y="500" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">sync_2ff × 4</text>
+      <text x="288" y="516" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">paddle up/down inputs</text>
+
+      <!-- vga_timing -->
+      <rect x="440" y="304" width="200" height="80" rx="6" fill="#2d3142"/>
+      <rect x="440" y="304" width="200" height="80" rx="6" fill="#393e53" stroke="#f5f5f5" stroke-width="1"/>
+      <rect x="448" y="312" width="32" height="12" rx="2" fill="transparent" stroke="rgba(245,245,245,0.40)" stroke-width="0.8"/>
+      <text x="464" y="321" fill="#f5f5f5" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">CNT</text>
+      <text x="540" y="340" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">vga_timing</text>
+      <text x="540" y="356" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">h_cnt 0–799 · v_cnt 0–524</text>
+      <text x="540" y="370" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">tick at v = 480</text>
+
+      <!-- game_logic (focal) -->
+      <rect x="440" y="456" width="200" height="80" rx="6" fill="#2d3142"/>
+      <rect x="440" y="456" width="200" height="80" rx="6" fill="rgba(240,138,89,0.08)" stroke="#f08a59" stroke-width="1"/>
+      <rect x="448" y="464" width="32" height="12" rx="2" fill="transparent" stroke="rgba(240,138,89,0.50)" stroke-width="0.8"/>
+      <text x="464" y="473" fill="#f08a59" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">FSM</text>
+      <text x="540" y="492" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">game_logic</text>
+      <text x="540" y="508" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">FSM + datapath</text>
+      <text x="540" y="522" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">updates once per frame</text>
+
+      <!-- pixel_gen -->
+      <rect x="760" y="304" width="216" height="232" rx="6" fill="#2d3142"/>
+      <rect x="760" y="304" width="216" height="232" rx="6" fill="#393e53" stroke="#f5f5f5" stroke-width="1"/>
+      <rect x="768" y="312" width="32" height="12" rx="2" fill="transparent" stroke="rgba(245,245,245,0.40)" stroke-width="0.8"/>
+      <text x="784" y="321" fill="#f5f5f5" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">MUX</text>
+      <text x="868" y="356" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">pixel_gen</text>
+      <!-- internal stages -->
+      <rect x="784" y="376" width="168" height="36" rx="4" fill="rgba(245,245,245,0.04)" stroke="rgba(245,245,245,0.22)" stroke-width="0.8"/>
+      <text x="868" y="398" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">1 · rectangle tests</text>
+      <rect x="784" y="420" width="168" height="36" rx="4" fill="rgba(245,245,245,0.04)" stroke="rgba(245,245,245,0.22)" stroke-width="0.8"/>
+      <text x="868" y="442" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">2 · priority mux</text>
+      <rect x="784" y="464" width="168" height="36" rx="4" fill="rgba(245,245,245,0.04)" stroke="rgba(245,245,245,0.22)" stroke-width="0.8"/>
+      <text x="868" y="486" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">3 · output register</text>
+      <text x="868" y="522" fill="#949eb2" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">black outside active area</text>
+
+      <!-- Video DAC / VGA (external) -->
+      <rect x="1124" y="104" width="128" height="432" rx="6" fill="#2d3142"/>
+      <rect x="1124" y="104" width="128" height="432" rx="6" fill="rgba(191,192,192,0.10)" stroke="#949eb2" stroke-width="1"/>
+      <rect x="1132" y="148" width="28" height="12" rx="2" fill="transparent" stroke="rgba(148,158,178,0.50)" stroke-width="0.8"/>
+      <text x="1146" y="157" fill="#949eb2" font-size="7" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">EXT</text>
+      <text x="1188" y="128" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">DAC_CLK · A4</text>
+      <text x="1188" y="292" fill="#f5f5f5" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Video DAC</text>
+      <text x="1188" y="308" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">→ VGA monitor</text>
+      <text x="1188" y="324" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">60 Hz · 640×480</text>
+      <text x="1188" y="408" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">Rout Gout Bout</text>
+      <text x="1188" y="456" fill="#bfc0c0" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">H · V</text>
+
+      <!-- Callout -->
+      <text x="764" y="168" fill="#bfc0c0" font-size="14" font-style="italic" font-family="'Instrument Serif', serif">One real clock: pix_en lets every</text>
+      <text x="764" y="186" fill="#bfc0c0" font-size="14" font-style="italic" font-family="'Instrument Serif', serif">register update on alternate edges,</text>
+      <text x="764" y="204" fill="#bfc0c0" font-size="14" font-style="italic" font-family="'Instrument Serif', serif">giving 25 MHz pixels with no derived</text>
+      <text x="764" y="222" fill="#bfc0c0" font-size="14" font-style="italic" font-family="'Instrument Serif', serif">clock and no domain crossing.</text>
+
+      <!-- Legend strip -->
+      <line x1="40" y1="604" x2="1240" y2="604" stroke="rgba(245,245,245,0.10)" stroke-width="0.8"/>
+      <text x="40" y="624" fill="#bfc0c0" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.18em">LEGEND</text>
+
+      <rect x="40" y="644" width="14" height="10" rx="2" fill="rgba(240,138,89,0.08)" stroke="#f08a59" stroke-width="1"/>
+      <text x="60" y="652" fill="#bfc0c0" font-size="9" font-family="'Geist', sans-serif">Focal: game state</text>
+
+      <rect x="196" y="644" width="14" height="10" rx="2" fill="#393e53" stroke="#f5f5f5" stroke-width="1"/>
+      <text x="216" y="652" fill="#bfc0c0" font-size="9" font-family="'Geist', sans-serif">Logic block (own .vhd)</text>
+
+      <rect x="372" y="644" width="14" height="10" rx="2" fill="rgba(245,245,245,0.05)" stroke="#bfc0c0" stroke-width="1"/>
+      <text x="392" y="652" fill="#bfc0c0" font-size="9" font-family="'Geist', sans-serif">Clock / sync stage</text>
+
+      <rect x="532" y="644" width="14" height="10" rx="2" fill="rgba(191,192,192,0.10)" stroke="#949eb2" stroke-width="1"/>
+      <text x="552" y="652" fill="#bfc0c0" font-size="9" font-family="'Geist', sans-serif">Off-chip</text>
+
+      <line x1="640" y1="649" x2="668" y2="649" stroke="#f08a59" stroke-width="1.4" marker-end="url(#arrow-accent)"/>
+      <text x="676" y="652" fill="#bfc0c0" font-size="9" font-family="'Geist', sans-serif">Registered game state</text>
+
+      <line x1="812" y1="649" x2="840" y2="649" stroke="#bfc0c0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="848" y="652" fill="#bfc0c0" font-size="9" font-family="'Geist', sans-serif">Signal</text>
+
+      <line x1="916" y1="649" x2="944" y2="649" stroke="#bfc0c0" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+      <text x="952" y="652" fill="#bfc0c0" font-size="9" font-family="'Geist', sans-serif">Control fan-out to every block in zone</text>
+    </svg>
+    </div>
+  </div>
+</body>
+</html>
